@@ -49,6 +49,7 @@ var corsOptions = {
   origin: [
     "*",
     "http://localhost:6666",
+    "http://localhost:4000",
     "http://localhost:3000",
     "https://bds.pmcweb.vn",
   ],
