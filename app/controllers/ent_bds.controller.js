@@ -1,11 +1,12 @@
 const Ent_bds = require("../models/ent_bds.model");
+const Logs = require("../models/logs.model");
 const { Op, Sequelize } = require("sequelize");
 const sequelize = require("../config/db.config");
 const xlsx = require("xlsx");
 
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.Toanha || !req.body.Sotang) {
+  if (!req.body.Project) {
     res.status(400).json({
       message: "Phải nhập đầy đủ dữ liệu!",
     });
@@ -13,18 +14,46 @@ exports.create = (req, res) => {
   }
 
   // Create a ent_bds
-  const data = {
-    ID_Duan: req.body.ID_Duan,
-    Toanha: req.body.Toanha,
-    Sotang: req.body.Sotang,
+  const updateData = {
+    Type: req.body.Type,
+    Developer: req.body.Developer,
+    Project: req.body.Project,
+    CurrentStatus: req.body.CurrentStatus,
+    Address: req.body.Address,
+    Commune: req.body.Commune,
+    District: req.body.District,
+    Province: req.body.Province,
+    Price: req.body.Price,
+    LandArea: req.body.LandArea,
+    NoOfArea: req.body.NoOfArea,
+    NoOfTowers: req.body.NoOfTowers,
+    Grade: req.body.Grade,
+    NoOfStories: req.body.NoOfStories,
+    NoOfBasements: req.body.NoOfBasements,
+    ConstructionArea: req.body.ConstructionArea,
+    GFA: req.body.GFA,
+    TotalBasementArea: req.body.TotalBasementArea,
+    NFA: req.body.NFA,
+    OfficeArea: req.body.OfficeArea,
+    RetailArea: req.body.RetailArea,
+    AptArea: req.body.AptArea,
+    Chudautu: req.body.Chudautu,
+    Banquantri: req.body.Banquantri,
+    Thongtinlienhe: req.body.Thongtinlienhe,
+    Tiendotiepcankhachhang: req.body.Tiendotiepcankhachhang,
+    ConstructionCompany: req.body.ConstructionCompany,
+    ArchitectureFirm: req.body.ArchitectureFirm,
+    ManagementCompany: req.body.ManagementCompany,
+    BuildingComitee: req.body.BuildingComitee,
+    Ghichu: req.body.Ghichu,
     isDelete: 0,
   };
 
   // Save ent_bds in the database
-  Ent_bds.create(data)
+  Ent_bds.create(updateData)
     .then((data) => {
       res.status(200).json({
-        message: "Tạo tòa nhà thành công!",
+        message: "Tạo thành công!",
         data: data,
       });
     })
@@ -135,6 +164,13 @@ exports.update = async (req, res) => {
         },
       });
 
+      await Logs.create({
+        ID_User: userData.ID_User,
+        ID_Bds: req.params.id,
+        Ngay: new Date(), // Lưu thời gian cập nhật,
+        isDelete: 0,
+      });
+
       res.status(200).json({
         message: "Cập nhật thành công!!!",
         data: data,
@@ -155,6 +191,13 @@ exports.delete = async (req, res) => {
   try {
     const userData = req.user.data;
     if (userData) {
+      await Logs.create({
+        ID_User: userData.ID_User,
+        ID_Bds: req.params.id,
+        Ngay: new Date(), // Lưu thời gian cập nhật,
+        isDelete: 0,
+      });
+
       Ent_bds.update(
         { isDelete: 1 },
         {
@@ -228,6 +271,7 @@ exports.uploadFile = async (req, res) => {
 
       for (const item of data) {
         const transformedItem = removeSpacesFromKeys(item);
+        console.log("transformedItem", transformedItem);
         // Map each field from the Excel data to model properties
         await Ent_bds.create(
           {
