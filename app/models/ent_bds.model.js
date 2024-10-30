@@ -11,98 +11,98 @@ const Ent_bds = sequelize.define(
       primaryKey: true,
     },
     Project: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Developer: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Type: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     CurrentStatus: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Address: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Commune: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     District: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Province: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Price: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     LandArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     NoOfArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     NoOfTowers: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Grade: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     NoOfStories: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     NoOfBasements: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     ConstructionArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     GFA: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     TotalBasementArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     NFA: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     OfficeArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     RetailArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     AptArea: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Chudautu: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Banquantri: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Thongtinlienhe: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Tiendotiepcankhachhang: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     ConstructionCompany: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
 
     ArchitectureFirm: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     ManagementCompany: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     BuildingComitee: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
     Ghichu: {
-      type: DataTypes.CHAR,
+      type: DataTypes.TEXT,
     },
 
     isDelete: {
