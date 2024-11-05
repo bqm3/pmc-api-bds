@@ -9,7 +9,7 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   router.post("/create", [isAuthenticated], ent_bds.create);
-  router.get("/", [isAuthenticated], ent_bds.get);
+  router.get("/", ent_bds.get);
   router.get('/search', ent_bds.searchEntBds);
   router.get("/:id", [isAuthenticated], ent_bds.getDetail);
   router.put("/update/:id", [isAuthenticated], ent_bds.update);
