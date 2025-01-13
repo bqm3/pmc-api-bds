@@ -74,6 +74,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/ent_user.route")(app);
 require("./app/routes/ent_bds.route")(app);
+require("./app/routes/ent_vattu.route")(app);
 
 const PORT = process.env.PORT || 8386;
 app.listen(PORT, () => {

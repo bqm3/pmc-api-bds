@@ -17,6 +17,9 @@ const Logs = sequelize.define(
     ID_Bds: {
       type: DataTypes.INTEGER,
     },
+    ID_VatTu: {
+      type: DataTypes.INTEGER,
+    },
     Ngay: {
       type: DataTypes.DATE,
     },

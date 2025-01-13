@@ -32,6 +32,7 @@ exports.login = async (req, res) => {
         "ID_User",
         "UserName",
         "Password",
+        "isRole",
         "isDelete",
       ],
     });
