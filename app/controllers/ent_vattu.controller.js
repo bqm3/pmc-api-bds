@@ -31,7 +31,7 @@ exports.create = async (req, res) => {
 
     // Create a new entry in the database
     const data = await Ent_VatTu.create(updateData);
-    
+
     // Respond with success message
     res.status(200).json({
       message: "Tạo thành công!",
@@ -116,13 +116,13 @@ exports.update = async (req, res) => {
 
   if (image) {
     const projectFolder = path.basename(path.dirname(image.path));
-    const filename = path.basename(image.filename); 
-    updateData.Anh = `${projectFolder}/${filename}`; 
+    const filename = path.basename(image.filename);
+    updateData.Anh = `${projectFolder}/${filename}`;
   }
 
   try {
     const [updated] = await Ent_VatTu.update(updateData, {
-      where: { ID_VatTu: id }, 
+      where: { ID_VatTu: id },
     });
 
     await Logs.create({
@@ -133,7 +133,9 @@ exports.update = async (req, res) => {
     });
 
     if (updated) {
-      const updatedRecord = await Ent_VatTu.findOne({ where: { ID_VatTu: id } });
+      const updatedRecord = await Ent_VatTu.findOne({
+        where: { ID_VatTu: id },
+      });
       return res.status(200).json({
         message: "Cập nhật thành công!",
         data: updatedRecord,
@@ -159,7 +161,7 @@ exports.delete = async (req, res) => {
     if (userData) {
       await Logs.create({
         ID_User: userData.ID_User,
-        ID_VatTu: id,
+        ID_VatTu: req.params.id,
         Ngay: new Date(),
         isDelete: 0,
       });
@@ -205,6 +207,7 @@ exports.searchEntVattu = async (req, res) => {
           { TuoiThoTB: { [Sequelize.Op.like]: `%${search}%` } },
           { Loai: { [Sequelize.Op.like]: `%${search}%` } },
         ],
+        isDelete: 0,
       },
     });
     res.json({
@@ -219,7 +222,9 @@ exports.searchEntVattu = async (req, res) => {
 exports.uploadFile = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "Vui lòng tải lên file Excel." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Vui lòng tải lên file Excel." });
     }
 
     // Đọc dữ liệu từ file Excel
@@ -229,39 +234,38 @@ exports.uploadFile = async (req, res) => {
     const data = xlsx.utils.sheet_to_json(worksheet);
 
     if (!data.length) {
-      return res.status(400).json({ success: false, message: "File Excel không có dữ liệu." });
+      return res
+        .status(400)
+        .json({ success: false, message: "File Excel không có dữ liệu." });
     }
 
-    let MaVT = [];
+    // Xử lý dữ liệu: Điền thông tin thiếu
+    data.forEach((item, index) => {
+      if (!item["DANH MỤC VẬT TƯ (Part name)"] && index > 0) {
+        item["DANH MỤC VẬT TƯ (Part name)"] =
+          data[index - 1]["DANH MỤC VẬT TƯ (Part name)"];
+        item["GHI CHÚ (Notes)"] == undefined
+          ? (item["GHI CHÚ (Notes)"] = data[index - 1]["GHI CHÚ (Notes)"])
+          : "";
+      }
+    });
+
     for (let i = 0; i < data.length; i++) {
-      const row = data[i];
-      const mavt = row["Mã VT"]?.trim();
-      if (mavt) {
-        MaVT.push(mavt);
-      }
+      const record = {
+        DM_VatTu: data[i]["DANH MỤC VẬT TƯ (Part name)"],
+        MaVT: data[i]["Mã VT"],
+        ChungLoai: data[i]["CHỦNG LOẠI (Model type)"],
+        ControlType: data[i]["Control type"],
+        TuoiThoTB: data[i]["\r\nTUỔI THỌ TRUNG BÌNH "] || "",
+        GhiChu: data[i]["GHI CHÚ (Notes)"],
+        Loai: data[i]["Loại"],
+      };
+      await Ent_VatTu.create(record);
     }
 
-    if (MaVT.length === 0) {
-      return res.status(400).json({ success: false, message: "Không tìm thấy mã VT hợp lệ." });
-    }
-
-    // Batch update
-    const arrVattu = await Ent_VatTu.findAll();
-
-    for (let i = 0; i < arrVattu.length; i++) {
-        await Ent_VatTu.update(
-          {
-            MaVT: MaVT[i], 
-          },
-          {
-            where: {
-              ID_VatTu: arrVattu[i].ID_VatTu,  
-            },
-          }
-        );
-      }
-
-    return res.status(200).json({ success: true, message: "Tải lên và xử lý thành công." });
+    return res
+      .status(200)
+      .json({ success: true, message: "Tải lên và xử lý thành công." });
   } catch (error) {
     console.error("Upload error:", error);
     return res.status(500).json({
@@ -270,4 +274,3 @@ exports.uploadFile = async (req, res) => {
     });
   }
 };
-  
