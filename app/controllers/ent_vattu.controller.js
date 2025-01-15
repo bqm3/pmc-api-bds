@@ -20,6 +20,20 @@ exports.create = async (req, res) => {
       isDelete: 0,
     };
 
+    let missingFields = [];
+
+    if (!updateData.DM_VatTu) missingFields.push("Danh mục vật tư");
+    if (!updateData.MaVT) missingFields.push("Mã vật tư");
+    if (!updateData.ChungLoai) missingFields.push("Chủng loại");
+    if (!updateData.ControlType) missingFields.push("Loại điều khiển");
+    
+    if (missingFields.length > 0) {
+      return res.status(201).json({
+        message: `Dữ liệu không hợp lệ. Vui lòng nhập: ${missingFields.join(", ")}. Vui lòng kiểm tra và thử lại.`,
+      });
+    }
+    
+
     // Get the first image (if available)
     const image = req?.files?.[0];
 
