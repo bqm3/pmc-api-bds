@@ -9,14 +9,15 @@ exports.create = async (req, res) => {
   try {
     // Create a new entry for ent_bds
     const updateData = {
-      DM_VatTu: req.body.DM_VatTu,
-      Anh: req.body.Anh,
-      MaVT: req.body.MaVT,
-      ChungLoai: req.body.ChungLoai,
-      ControlType: req.body.ControlType,
-      TuoiThoTB: req.body.TuoiThoTB,
-      GhiChu: req.body.GhiChu,
-      Loai: req.body.Loai,
+      DM_VatTu: req.body?.DM_VatTu,
+      Anh: req.body?.Anh,
+      MaVT: req.body?.MaVT,
+      ChungLoai: req.body?.ChungLoai,
+      ControlType: req.body?.ControlType,
+      TuoiThoTB: req.body?.TuoiThoTB,
+      GhiChu: req.body?.GhiChu,
+      Loai: req.body?.Loai,
+      TenHang: req.body?.TenHang,
       isDelete: 0,
     };
 
@@ -82,6 +83,26 @@ exports.get = async (req, res) => {
   }
 };
 
+exports.getTenHang = async (req, res) => {
+  try {
+    const tenhang = await Ent_VatTu.findAll({
+      attributes: [
+        [Sequelize.fn('DISTINCT', Sequelize.col('TenHang')), 'TenHang']
+      ],
+      where: {
+        isDelete: 0
+      }
+    });
+
+    const tenhangArray = tenhang.map(item => item.TenHang);
+    res.status(200).json({
+      TenHang: tenhangArray
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getDetail = async (req, res) => {
   try {
     const userData = req.user.data;
@@ -124,6 +145,7 @@ exports.update = async (req, res) => {
     TuoiThoTB: req.body.TuoiThoTB,
     GhiChu: req.body.GhiChu,
     Loai: req.body.Loai,
+    TenHang: req.body.TenHang,
   };
 
   const image = req?.files?.[0];
@@ -220,6 +242,7 @@ exports.searchEntVattu = async (req, res) => {
           { ControlType: { [Sequelize.Op.like]: `%${search}%` } },
           { TuoiThoTB: { [Sequelize.Op.like]: `%${search}%` } },
           { Loai: { [Sequelize.Op.like]: `%${search}%` } },
+          { TenHang: { [Sequelize.Op.like]: `%${search}%` } },
         ],
         isDelete: 0,
       },
@@ -273,6 +296,7 @@ exports.uploadFile = async (req, res) => {
         TuoiThoTB: data[i]["\r\nTUỔI THỌ TRUNG BÌNH "] || "",
         GhiChu: data[i]["GHI CHÚ (Notes)"],
         Loai: data[i]["Loại"],
+        TenHang: data[i]["Hãng"]
       };
       await Ent_VatTu.create(record);
     }

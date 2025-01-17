@@ -34,6 +34,9 @@ const Ent_VatTu = sequelize.define(
     Loai: {
       type: DataTypes.TEXT,
     },
+    TenHang: {
+      type: DataTypes.TEXT,
+    },
     isDelete: {
       type: DataTypes.INTEGER,
       defaultValue: 0,

@@ -16,6 +16,7 @@ module.exports = (app) => {
   router.post("/create", [isAuthenticated, uploadVatTu.any("images"), resizeImage], ent_vattu.create);
   router.get("/", ent_vattu.get);
   router.get('/search', ent_vattu.searchEntVattu);
+  router.get('/tenhang', ent_vattu.getTenHang);
   router.get("/:id", [isAuthenticated], ent_vattu.getDetail);
   router.put("/update/:id", [isAuthenticated, uploadVatTu.any("images"), resizeImage], ent_vattu.update);
   router.put("/delete/:id", [isAuthenticated], ent_vattu.delete);
