@@ -7,7 +7,6 @@ var path = require("path");
 
 exports.create = async (req, res) => {
   try {
-    // Create a new entry for ent_bds
     const updateData = {
       DM_VatTu: req.body?.DM_VatTu,
       Anh: req.body?.Anh,
@@ -27,13 +26,12 @@ exports.create = async (req, res) => {
     if (!updateData.MaVT) missingFields.push("Mã vật tư");
     if (!updateData.ChungLoai) missingFields.push("Chủng loại");
     if (!updateData.ControlType) missingFields.push("Loại điều khiển");
-    
+
     if (missingFields.length > 0) {
       return res.status(201).json({
         message: `Dữ liệu không hợp lệ. Vui lòng nhập: ${missingFields.join(", ")}. Vui lòng kiểm tra và thử lại.`,
       });
     }
-    
 
     // Get the first image (if available)
     const image = req?.files?.[0];
@@ -86,17 +84,15 @@ exports.get = async (req, res) => {
 exports.getTenHang = async (req, res) => {
   try {
     const tenhang = await Ent_VatTu.findAll({
-      attributes: [
-        [Sequelize.fn('DISTINCT', Sequelize.col('TenHang')), 'TenHang']
-      ],
+      attributes: [[Sequelize.fn("DISTINCT", Sequelize.col("TenHang")), "TenHang"]],
       where: {
-        isDelete: 0
-      }
+        isDelete: 0,
+      },
     });
 
-    const tenhangArray = tenhang.map(item => item.TenHang);
+    const tenhangArray = tenhang.map((item) => item.TenHang);
     res.status(200).json({
-      TenHang: tenhangArray
+      TenHang: tenhangArray,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -107,24 +103,24 @@ exports.getDetail = async (req, res) => {
   try {
     const userData = req.user.data;
     // if (userData) {
-      let whereClause = {
-        isDelete: 0,
-      };
+    let whereClause = {
+      isDelete: 0,
+    };
 
-      await Ent_VatTu.findByPk(req.params.id, {
-        where: whereClause,
-      })
-        .then((data) => {
-          res.status(200).json({
-            message: "Danh sách!",
-            data: data,
-          });
-        })
-        .catch((err) => {
-          res.status(500).json({
-            message: err.message || "Lỗi! Vui lòng thử lại sau.",
-          });
+    await Ent_VatTu.findByPk(req.params.id, {
+      where: whereClause,
+    })
+      .then((data) => {
+        res.status(200).json({
+          message: "Danh sách!",
+          data: data,
         });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: err.message || "Lỗi! Vui lòng thử lại sau.",
+        });
+      });
     // }
   } catch (err) {
     return res.status(500).json({
@@ -259,9 +255,7 @@ exports.searchEntVattu = async (req, res) => {
 exports.uploadFile = async (req, res) => {
   try {
     if (!req.file) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Vui lòng tải lên file Excel." });
+      return res.status(400).json({ success: false, message: "Vui lòng tải lên file Excel." });
     }
 
     // Đọc dữ liệu từ file Excel
@@ -271,19 +265,14 @@ exports.uploadFile = async (req, res) => {
     const data = xlsx.utils.sheet_to_json(worksheet);
 
     if (!data.length) {
-      return res
-        .status(400)
-        .json({ success: false, message: "File Excel không có dữ liệu." });
+      return res.status(400).json({ success: false, message: "File Excel không có dữ liệu." });
     }
 
     // Xử lý dữ liệu: Điền thông tin thiếu
     data.forEach((item, index) => {
       if (!item["DANH MỤC VẬT TƯ (Part name)"] && index > 0) {
-        item["DANH MỤC VẬT TƯ (Part name)"] =
-          data[index - 1]["DANH MỤC VẬT TƯ (Part name)"];
-        item["GHI CHÚ (Notes)"] == undefined
-          ? (item["GHI CHÚ (Notes)"] = data[index - 1]["GHI CHÚ (Notes)"])
-          : "";
+        item["DANH MỤC VẬT TƯ (Part name)"] = data[index - 1]["DANH MỤC VẬT TƯ (Part name)"];
+        item["GHI CHÚ (Notes)"] == undefined ? (item["GHI CHÚ (Notes)"] = data[index - 1]["GHI CHÚ (Notes)"]) : "";
       }
     });
 
@@ -296,14 +285,12 @@ exports.uploadFile = async (req, res) => {
         TuoiThoTB: data[i]["\r\nTUỔI THỌ TRUNG BÌNH "] || "",
         GhiChu: data[i]["GHI CHÚ (Notes)"],
         Loai: data[i]["Loại"],
-        TenHang: data[i]["Hãng"]
+        TenHang: data[i]["Hãng"],
       };
       await Ent_VatTu.create(record);
     }
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Tải lên và xử lý thành công." });
+    return res.status(200).json({ success: true, message: "Tải lên và xử lý thành công." });
   } catch (error) {
     console.error("Upload error:", error);
     return res.status(500).json({
