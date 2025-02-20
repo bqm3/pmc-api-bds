@@ -9,7 +9,7 @@ module.exports = (app) => {
 
   router.post("/login", ent_user.login);
   router.post("/register", ent_user.register);
-  router.post("/validate-token", [isAuthenticated], ent_user.checkAuth);
+  router.get("/validate-token", [isAuthenticated], ent_user.checkAuth);
 
   app.use("/api/v1/user", router);
 };

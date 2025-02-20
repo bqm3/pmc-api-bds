@@ -33,6 +33,7 @@ exports.login = async (req, res) => {
         "UserName",
         "Password",
         "isRole",
+        "isAction",
         "isDelete",
       ],
     });
@@ -155,56 +156,10 @@ exports.checkAuth = async (req, res, next) => {
       attributes: [
         "ID_User",
         "UserName",
-        "Email",
-        "Hoten",
-        "Gioitinh",
-        "Sodienthoai",
-        "Ngaysinh",
-        "ID_Duan",
-        "ID_KhoiCV",
-        "deviceToken",
-        "ID_Chucvu",
-      ],
-      include: [
-        {
-          model: Ent_duan,
-          attributes: [
-            "ID_Duan",
-            "Duan",
-            "Diachi",
-            "ID_Nhom",
-            "ID_Chinhanh",
-            "ID_Linhvuc",
-            "ID_Loaihinh",
-            "ID_Phanloai",
-            "Vido",
-            "Kinhdo",
-            "Logo",
-            "isDelete",
-          ],
-          include: [
-            {
-              model: ent_bds,
-              as: "ent_bds",
-              attributes: ["Toanha", "Sotang", "ID_Duan", "Vido", "Kinhdo"],
-              where: { isDelete: 0 },
-              required: false,
-            },
-            {
-              model: Ent_nhom,
-              as: "ent_nhom",
-              attributes: ["Tennhom", "ID_Nhom"],
-            },
-          ],
-        },
-        {
-          model: Ent_chucvu,
-          attributes: ["Chucvu", "Role"],
-        },
-        {
-          model: Ent_khoicv,
-          attributes: ["KhoiCV", "Ngaybatdau", "Chuky"],
-        },
+        "Password",
+        "isRole",
+        "isAction",
+        "isDelete",
       ],
       where: {
         isDelete: 0,

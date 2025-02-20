@@ -16,6 +16,10 @@ const isAuthenticated = asyncHandler((req, res, next) => {
       return res.status(403).json({ message: `Token không hợp lệ ${err}` });
     }
 
+    // if(user.data.isRole == 1 && user.data.isAction == 0) {
+    //   return res.status(404).json({ message: `Bạn không có quyền chỉnh sửa` });
+    // }
+
     req.user = user;
     next();
   });

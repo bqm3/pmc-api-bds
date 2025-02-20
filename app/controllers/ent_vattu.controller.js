@@ -106,7 +106,7 @@ exports.getTenHang = async (req, res) => {
 exports.getDetail = async (req, res) => {
   try {
     const userData = req.user.data;
-    if (userData) {
+    // if (userData) {
       let whereClause = {
         isDelete: 0,
       };
@@ -125,7 +125,7 @@ exports.getDetail = async (req, res) => {
             message: err.message || "Lỗi! Vui lòng thử lại sau.",
           });
         });
-    }
+    // }
   } catch (err) {
     return res.status(500).json({
       message: err.message || "Lỗi! Vui lòng thử lại sau.",

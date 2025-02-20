@@ -22,6 +22,9 @@ const Ent_user = sequelize.define(
     isRole: {
       type: DataTypes.INTEGER,
     },
+    isAction: {
+      type: DataTypes.INTEGER,
+    },
     isDelete: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
