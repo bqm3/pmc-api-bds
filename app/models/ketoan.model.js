@@ -21,7 +21,7 @@ const PhiDV = sequelize.define('PhiDV', {
     allowNull: true,
   },
   ngaybangiao: {
-    type: DataTypes.DATEONLY,
+    type: DataTypes.STRING(225),
     allowNull: true,
   },
   chuho: {
