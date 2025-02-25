@@ -59,18 +59,6 @@ exports.uploadFile = async (req, res) => {
       "Năm": "nam",
     };
 
-    const excelHeaders = Object.keys(data[0]).map((header) => header.trim());
-    const requiredFields = Object.keys(fieldMap).map((field) => field.trim());
-
-    const missingFields = requiredFields.filter((field) => !excelHeaders.includes(field));
-    if (missingFields.length > 0) {
-      await transaction.rollback();
-      return res.status(400).json({
-        success: false,
-        message: `Tệp Excel thiếu các trường bắt buộc: ${missingFields.join(", ")}`,
-      });
-    }
-
     // Xử lý dữ liệu
     const processedData = data.map((row) => {
       const record = {};
@@ -93,7 +81,7 @@ exports.uploadFile = async (req, res) => {
       Content: "Upload phí dịch vụ",
       Ngay: new Date(),
       isDelete: 0,
-    }, { transaction });
+    });
 
     await transaction.commit(); // Xác nhận giao dịch
 
