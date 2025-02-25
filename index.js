@@ -1,16 +1,10 @@
 require("dotenv").config();
-const cron = require("node-cron");
 const express = require("express");
-const PDFDocument = require("pdfkit");
 const cookieParser = require("cookie-parser");
 const { google } = require("googleapis");
-const fs = require("fs");
-const path = require("path");
-const mysqldump = require("mysqldump");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const admin = require("firebase-admin");
-const { getMessaging } = require("firebase-admin/messaging");
 const app = express();
 
 var serviceAccount = require("./pmc-cskh-firebase-adminsdk-y7378-5122f6edc7.json");
@@ -75,6 +69,7 @@ app.get("/", (req, res) => {
 require("./app/routes/ent_user.route")(app);
 require("./app/routes/ent_bds.route")(app);
 require("./app/routes/ent_vattu.route")(app);
+require("./app/routes/ketoan.route")(app);
 
 const PORT = process.env.PORT || 8386;
 app.listen(PORT, () => {
